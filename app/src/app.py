@@ -1,4 +1,7 @@
 import streamlit as st
+import sys
+sys.path.append("..")  # Add parent directory to sys.path to access resume_parser module
+import resume_parser
 
 def stage1_ui():
 
@@ -62,7 +65,11 @@ if __name__ == "__main__":
         else:
             st.success("✅ Inputs received! Processing your resume...")
 
+            resume_bytes = resume_file.getvalue()
             # Call the backend processing functions
             st.info("Next step: Calling Resume Parsing Module...")
+            structured_resume = parse_resume(resume_bytes, resume_file.type)
+
+            st.json(structured_resume)
             st.info("Next step: Calling JD Analysis Module...")
-            # 最终，所有处理完成后，会在这里显示下载按钮
+
