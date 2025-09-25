@@ -1,0 +1,77 @@
+# === Byte‑compiled / optimized / DLL files ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# === C extensions ===
+*.so
+
+# === Distribution / packaging ===
+build/
+dist/
+*.egg-info/
+*.egg
+
+# === Virtual environments ===
+venv/
+.venv/
+env/
+ENV/
+myenv/
+
+# === Python tooling caches ===
+.mypy_cache/
+.pytest_cache/
+.cache/
+.coverage
+htmlcov/
+
+# === Database files (if local/SQLite) ===
+*.db
+*.sqlite
+*.sqlite3
+
+# === Logs ===
+*.log
+logs/
+
+# === Environment variables ===
+.env
+.env.*         # e.g. .env.local, .env.development, etc.
+!.env.example  # keep a template in repo
+
+# === IDE & Editor settings ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Jupyter Notebooks ===
+.ipynb_checkpoints
+
+# === FastAPI / Alembic ===
+# Keep your migration scripts under version control!
+# (Don’t ignore alembic/versions/*.py)
+alembic/*.pyc
+alembic/__pycache__/
+
+# === Optional: Docker / Containers ===
+# Uncomment if you’re using Docker
+# docker-compose.override.yml
+# .docker/
+
+# === Optional: Pyenv / Poetry ===
+.python-version
+poetry.lock
+
+# === Miscellaneous ===
+
+# any stray local files
+*.env/*.local   
+local/
