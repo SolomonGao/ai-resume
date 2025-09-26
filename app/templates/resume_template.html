@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}'s Resume</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Garamond:wght@400;700&display=swap');
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+        body {
+            font-family: 'Garamond', serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #333;
+        }
+        h1, h2, h3 {
+            margin: 0;
+            padding: 0;
+            font-weight: 700;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24pt;
+        }
+        .name {
+            font-size: 28pt;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .contact-info {
+            font-size: 10pt;
+            margin-top: 6pt;
+        }
+        .contact-info a {
+            color: #333;
+            text-decoration: none;
+        }
+        .section-title {
+            font-size: 14pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 4pt;
+            margin-top: 18pt;
+            margin-bottom: 12pt;
+        }
+        .summary p {
+            margin: 0;
+            text-align: justify;
+        }
+        .job, .education-entry, .project-entry {
+            margin-bottom: 12pt;
+        }
+        .job-header, .education-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 4pt;
+        }
+        .job-title, .degree, .project-name {
+            font-size: 12pt;
+            font-weight: 700;
+        }
+        .company, .institution {
+            font-style: italic;
+        }
+        .project-description {
+            margin-top: 4pt;
+        }
+        ul {
+            list-style-type: disc;
+            margin: 0 0 0 18pt;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 4pt;
+        }
+        .skills-list {
+            padding: 0;
+            margin: 0;
+            columns: 3;
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="name">{{ name }}</h1>
+        <div class="contact-info">
+            {{ contact.email }} | {{ contact.phone }} | <a href="https://{{ contact.link }}">{{ contact.link }}</a>
+        </div>
+    </div>
+
+    <div class="section summary">
+        <h2 class="section-title">Professional Summary</h2>
+        <p>{{ summary }}</p>
+    </div>
+
+    <div class="section skills">
+        <h2 class="section-title">Core Competencies & Skills</h2>
+        <ul class="skills-list">
+            {% for skill in skills %}
+                <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section experience">
+        <h2 class="section-title">Work Experience</h2>
+        {% for job in experience %}
+            <div class="job">
+                <div class="job-header">
+                    <div>
+                        <span class="job-title">{{ job.title }}</span> | <span class="company">{{ job.company }}</span>
+                    </div>
+                    <div class="date-range">{{ job.date_range }}</div>
+                </div>
+                <ul>
+                    {% for point in job.description_points %}
+                        <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# This is the conditional block for the Projects section. #}
+    {# It will only render if the 'projects' list exists and is not empty. #}
+    {% if projects %}
+    <div class="section projects">
+        <h2 class="section-title">Projects</h2>
+        {% for project in projects %}
+            <div class="project-entry">
+                <div class="project-name">{{ project.name }}</div>
+                <div class="project-description">{{ project.description }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="section education">
+        <h2 class="section-title">Education</h2>
+        {% for edu in education %}
+            <div class="education-entry">
+                <div class="education-header">
+                    <div>
+                        <span class="degree">{{ edu.degree }}</span>
+                    </div>
+                    <div class="date-range">{{ edu.date_range }}</div>
+                </div>
+                <div class="institution">{{ edu.institution }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+

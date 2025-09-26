@@ -1,6 +1,4 @@
 import streamlit as st
-import sys
-sys.path.append("..")  # Add parent directory to sys.path to access resume_parser module
 import resume_parser
 
 def stage1_ui():
@@ -68,8 +66,30 @@ if __name__ == "__main__":
             resume_bytes = resume_file.getvalue()
             # Call the backend processing functions
             st.info("Next step: Calling Resume Parsing Module...")
-            structured_resume = parse_resume(resume_bytes, resume_file.type)
+            resume_text = resume_parser.resume_to_text(resume_bytes, resume_file.type)
+            if "error" in resume_text:
+                st.error(f"❌ Resume read failed: {resume_text['error']}")
+                st.stop()
+            structured_resume = resume_parser.parse_resume_with_gemini(resume_text, jd_text)
 
-            st.json(structured_resume)
-            st.info("Next step: Calling JD Analysis Module...")
+            if "error" in structured_resume:
+                st.error(f"❌ Resume parsing with Gemini failed: {structured_resume['error']}")
+                st.stop()
+            
+            pdf_bytes = resume_parser.create_pdf_from_data(structured_resume)
+            
+            if isinstance(pdf_bytes, dict) and "error" in pdf_bytes:
+                st.error(f"❌ PDF generation failed: {pdf_bytes['error']}")
+                st.stop()
+            if pdf_bytes:
+                st.success("✅ Resume optimized successfully!")
+                st.download_button(
+                    label="Download Optimized Resume (PDF)",
+                    data=pdf_bytes,
+                    file_name="optimized_resume.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
+
+
 
