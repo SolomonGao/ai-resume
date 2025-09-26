@@ -1,101 +1,152 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>{{ name }}'s Resume</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Garamond:wght@400;700&display=swap');
-        
+
         /* --- AGGRESSIVE COMPACTNESS CHANGES --- */
         @page {
-            size: letter;
-            /* Further reduced margin to 0.5in */
-            margin: 0.5in;
+            page-size: A4;
+            page-break-after: avoid;
+            height: 100%;
+            overflow: hidden;
         }
+
         body {
-            font-family: 'Garamond', serif;
-            /* Further reduced font size to 10pt */
+            font-family: Arial, sans-serif;
             font-size: 10pt;
-            /* Further reduced line height to 1.25 */
-            line-height: 1.25;
+            line-height: 1.1;
+            margin: 0.5in;
             color: #333;
         }
+
         /* --- END OF CHANGES --- */
-        
-        h1, h2, h3 {
+
+        h1,
+        h2,
+        h3 {
             margin: 0;
             padding: 0;
             font-weight: 700;
         }
+
         .header {
             text-align: center;
-            margin-bottom: 18pt; /* Reduced from 20pt */
+            margin-bottom: 18pt;
+            /* Reduced from 20pt */
         }
+
         .name {
-            font-size: 24pt; /* Reduced from 26pt */
+            font-size: 24pt;
+            /* Reduced from 26pt */
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
         .contact-info {
-            font-size: 9.5pt; /* Reduced from 10pt */
-            margin-top: 4pt; /* Reduced from 5pt */
+            font-size: 9.5pt;
+            /* Reduced from 10pt */
+            margin-top: 4pt;
+            /* Reduced from 5pt */
         }
+
         .contact-info a {
             color: #333;
             text-decoration: none;
         }
+
         .section-title {
-            font-size: 12pt; /* Reduced from 13pt */
+            font-size: 12pt;
+            /* Reduced from 13pt */
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 1px solid #333;
-            padding-bottom: 2pt; /* Reduced from 3pt */
-            margin-top: 14pt; /* Reduced from 16pt */
-            margin-bottom: 8pt; /* Reduced from 10pt */
+            padding-bottom: 2pt;
+            /* Reduced from 3pt */
+            margin-top: 14pt;
+            /* Reduced from 16pt */
+            margin-bottom: 8pt;
+            /* Reduced from 10pt */
         }
+
+        .skills-inline {
+            font-size: 10pt;
+            line-height: 1.5;
+        }
+
+        .skills-inline span {
+            display: inline-block;
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+
         .summary p {
             margin: 0;
             text-align: justify;
         }
-        .job, .education-entry, .project-entry {
-            margin-bottom: 8pt; /* Reduced from 10pt */
+
+        .job,
+        .education-entry,
+        .project-entry {
+            margin-bottom: 8pt;
+            /* Reduced from 10pt */
         }
-        .job-header, .education-header, .project-header {
+
+        .job-header,
+        .education-header,
+        .project-header {
             display: flex;
             justify-content: space-between;
             font-weight: 700;
-            margin-bottom: 2pt; /* Reduced from 3pt */
+            margin-bottom: 2pt;
+            /* Reduced from 3pt */
         }
-        .job-title, .degree, .project-name {
-            font-size: 11pt; /* Reduced from 11.5pt */
+
+        .job-title,
+        .degree,
+        .project-name {
+            font-size: 11pt;
+            /* Reduced from 11.5pt */
         }
-        .company, .institution {
+
+        .company,
+        .institution {
             font-style: italic;
         }
+
         ul {
             list-style-type: disc;
             margin: 0 0 0 18pt;
             padding: 0;
         }
+
         li {
-            margin-bottom: 2pt; /* Reduced from 3pt */
+            margin-bottom: 2pt;
+            /* Reduced from 3pt */
         }
+
         .skills-list {
             padding: 0;
             margin: 0;
             columns: 3;
             list-style-type: none;
         }
+
         .project-description {
-             margin-top: 2pt;
+            margin-top: 2pt;
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1 class="name">{{ name }}</h1>
         <div class="contact-info">
-            {{ contact.email }} | {{ contact.phone }} | <a href="https://{{ contact.linkedin }}">{{ contact.linkedin }}</a>
+            {{ contact.email }} | {{ contact.phone }} | <a href="{{ contact.link }}" target="_blank">{{ contact.link
+                }}</a>
         </div>
     </div>
 
@@ -104,31 +155,31 @@
         <p>{{ summary }}</p>
     </div>
 
-    <div class="section skills">
+    <div class="section-skills">
         <h2 class="section-title">Core Competencies & Skills</h2>
-        <ul class="skills-list">
+        <p class="skills-inline">
             {% for skill in skills %}
-                <li>{{ skill }}</li>
+            <span>{{ skill }}</span>
             {% endfor %}
-        </ul>
+        </p>
     </div>
 
     <div class="section experience">
         <h2 class="section-title">Work Experience</h2>
         {% for job in experience %}
-            <div class="job">
-                <div class="job-header">
-                    <div>
-                        <span class="job-title">{{ job.title }}</span> | <span class="company">{{ job.company }}</span>
-                    </div>
-                    <div class="date-range">{{ job.date_range }}</div>
+        <div class="job">
+            <div class="job-header">
+                <div>
+                    <span class="job-title">{{ job.title }}</span> | <span class="company">{{ job.company }}</span>
                 </div>
-                <ul>
-                    {% for point in job.description_points %}
-                        <li>{{ point }}</li>
-                    {% endfor %}
-                </ul>
+                <div class="date-range">{{ job.date_range }}</div>
             </div>
+            <ul>
+                {% for point in job.description_points %}
+                <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endfor %}
     </div>
 
@@ -136,12 +187,12 @@
     <div class="section projects">
         <h2 class="section-title">Projects</h2>
         {% for project in projects %}
-            <div class="project-entry">
-                <div class="project-header">
-                     <span class="project-name">{{ project.name }}</span>
-                </div>
-                <div class="project-description">{{ project.description }}</div>
+        <div class="project-entry">
+            <div class="project-header">
+                <span class="project-name">{{ project.name }}</span>
             </div>
+            <div class="project-description">{{ project.description }}</div>
+        </div>
         {% endfor %}
     </div>
     {% endif %}
@@ -149,17 +200,17 @@
     <div class="section education">
         <h2 class="section-title">Education</h2>
         {% for edu in education %}
-            <div class="education-entry">
-                <div class="education-header">
-                    <div>
-                        <span class="degree">{{ edu.degree }}</span>
-                    </div>
-                    <div class="date-range">{{ edu.date_range }}</div>
+        <div class="education-entry">
+            <div class="education-header">
+                <div>
+                    <span class="degree">{{ edu.degree }}</span>
                 </div>
-                <div class="institution">{{ edu.institution }}</div>
+                <div class="date-range">{{ edu.date_range }}</div>
             </div>
+            <div class="institution">{{ edu.institution }}</div>
+        </div>
         {% endfor %}
     </div>
 </body>
-</html>
 
+</html>

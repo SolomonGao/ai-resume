@@ -75,6 +75,7 @@ if __name__ == "__main__":
             if "error" in structured_resume:
                 st.error(f"❌ Resume parsing with Gemini failed: {structured_resume['error']}")
                 st.stop()
+            st.json(structured_resume)
             
             pdf_bytes = resume_parser.create_pdf_from_data(structured_resume)
             

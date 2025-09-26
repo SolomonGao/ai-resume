@@ -12,15 +12,36 @@ from weasyprint import HTML
 dotenv.load_dotenv()
 
 def resume_to_text(file_bytes: bytes, file_type: str) -> dict:
-
+    links = []
     text = ""
     try:
         if "pdf" in file_type:
             with fitz.open(stream=file_bytes, filetype="pdf") as doc:
-                text = "".join(page.get_text() for page in doc)
+                for page in doc:
+
+                    text += page.get_text()
+
+                for link in page.get_links():
+                    uri = link.get("uri")
+                    if uri:
+                        rect = fitz.Rect(link["from"])  
+                        link_text = page.get_textbox(rect)  
+                        links.append({"text": link_text, "url": uri})
+
         elif "docx" in file_type or "word" in file_type:
             doc = docx.Document(io.BytesIO(file_bytes))
-            text = "\n".join(para.text for para in doc.paragraphs)
+            for para in doc.paragraphs:
+                text += para.text + "\n"
+
+                # Extract hyperlinks
+                rels = doc.part.rels
+                for rel in rels.values():
+                    if "hyperlink" in rel.reltype:
+                        links.append({"text": link_text, "url": rel.target_ref})
+
+
+
+
         else:
             return {"error": f"Unsupported file type: {file_type}"}
     except Exception as e:
@@ -29,7 +50,7 @@ def resume_to_text(file_bytes: bytes, file_type: str) -> dict:
     if not text.strip():
         return {"error": "Extracted text is empty."}
 
-    return {"text": text}
+    return {"text": text.strip(), "links": links}
 
 
 def parse_resume_with_gemini(resume_text: dict, jd_text: str) -> dict:
@@ -57,7 +78,7 @@ def parse_resume_with_gemini(resume_text: dict, jd_text: str) -> dict:
         "contact": {{
             "email": "email@address.com",
             "phone": "123-456-7890",
-            "link": "linkedin.com/in/username"
+            "link": "LinkedIn or Portfolio URL"
         }},
         "summary": "The rewritten professional summary.",
         "skills": ["List", "of", "relevant", "skills", "from", "the", "resume"],
@@ -93,8 +114,11 @@ def parse_resume_with_gemini(resume_text: dict, jd_text: str) -> dict:
         **Job Description:**
         {jd_text}
         ---
-        **Original Resume:**
-        {resume_text}
+        **Original Resume Text:**
+        {resume_text["text"]}
+        ---
+        **Extracted Links (from resume):**
+        {resume_text["links"]}
         ---
         """
 
