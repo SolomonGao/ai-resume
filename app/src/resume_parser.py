@@ -149,7 +149,9 @@ def parse_resume_with_gemini(resume_text: dict, jd_text: str) -> dict:
 def create_pdf_from_data(data: dict) -> bytes:
     """Renders an HTML template with resume data and converts it to a PDF."""
     try:
-        env = Environment(loader=FileSystemLoader("app/src/templates"))
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        template_dir = os.path.join(script_dir, 'templates')
+        env = Environment(loader=FileSystemLoader(template_dir))
         template = env.get_template("resume_template.html")
         rendered_html = template.render(data)
         pdf_bytes = HTML(string=rendered_html).write_pdf()

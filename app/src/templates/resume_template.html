@@ -5,16 +5,23 @@
     <title>{{ name }}'s Resume</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Garamond:wght@400;700&display=swap');
+        
+        /* --- AGGRESSIVE COMPACTNESS CHANGES --- */
         @page {
             size: letter;
-            margin: 0.75in;
+            /* Further reduced margin to 0.5in */
+            margin: 0.5in;
         }
         body {
             font-family: 'Garamond', serif;
-            font-size: 11pt;
-            line-height: 1.4;
+            /* Further reduced font size to 10pt */
+            font-size: 10pt;
+            /* Further reduced line height to 1.25 */
+            line-height: 1.25;
             color: #333;
         }
+        /* --- END OF CHANGES --- */
+        
         h1, h2, h3 {
             margin: 0;
             padding: 0;
@@ -22,52 +29,48 @@
         }
         .header {
             text-align: center;
-            margin-bottom: 24pt;
+            margin-bottom: 18pt; /* Reduced from 20pt */
         }
         .name {
-            font-size: 28pt;
+            font-size: 24pt; /* Reduced from 26pt */
             letter-spacing: 2px;
             text-transform: uppercase;
         }
         .contact-info {
-            font-size: 10pt;
-            margin-top: 6pt;
+            font-size: 9.5pt; /* Reduced from 10pt */
+            margin-top: 4pt; /* Reduced from 5pt */
         }
         .contact-info a {
             color: #333;
             text-decoration: none;
         }
         .section-title {
-            font-size: 14pt;
+            font-size: 12pt; /* Reduced from 13pt */
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 1px solid #333;
-            padding-bottom: 4pt;
-            margin-top: 18pt;
-            margin-bottom: 12pt;
+            padding-bottom: 2pt; /* Reduced from 3pt */
+            margin-top: 14pt; /* Reduced from 16pt */
+            margin-bottom: 8pt; /* Reduced from 10pt */
         }
         .summary p {
             margin: 0;
             text-align: justify;
         }
         .job, .education-entry, .project-entry {
-            margin-bottom: 12pt;
+            margin-bottom: 8pt; /* Reduced from 10pt */
         }
-        .job-header, .education-header {
+        .job-header, .education-header, .project-header {
             display: flex;
             justify-content: space-between;
             font-weight: 700;
-            margin-bottom: 4pt;
+            margin-bottom: 2pt; /* Reduced from 3pt */
         }
         .job-title, .degree, .project-name {
-            font-size: 12pt;
-            font-weight: 700;
+            font-size: 11pt; /* Reduced from 11.5pt */
         }
         .company, .institution {
             font-style: italic;
-        }
-        .project-description {
-            margin-top: 4pt;
         }
         ul {
             list-style-type: disc;
@@ -75,7 +78,7 @@
             padding: 0;
         }
         li {
-            margin-bottom: 4pt;
+            margin-bottom: 2pt; /* Reduced from 3pt */
         }
         .skills-list {
             padding: 0;
@@ -83,13 +86,16 @@
             columns: 3;
             list-style-type: none;
         }
+        .project-description {
+             margin-top: 2pt;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1 class="name">{{ name }}</h1>
         <div class="contact-info">
-            {{ contact.email }} | {{ contact.phone }} | <a href="https://{{ contact.link }}">{{ contact.link }}</a>
+            {{ contact.email }} | {{ contact.phone }} | <a href="https://{{ contact.linkedin }}">{{ contact.linkedin }}</a>
         </div>
     </div>
 
@@ -126,14 +132,14 @@
         {% endfor %}
     </div>
 
-    {# This is the conditional block for the Projects section. #}
-    {# It will only render if the 'projects' list exists and is not empty. #}
-    {% if projects %}
+    {% if projects and projects|length > 0 %}
     <div class="section projects">
         <h2 class="section-title">Projects</h2>
         {% for project in projects %}
             <div class="project-entry">
-                <div class="project-name">{{ project.name }}</div>
+                <div class="project-header">
+                     <span class="project-name">{{ project.name }}</span>
+                </div>
                 <div class="project-description">{{ project.description }}</div>
             </div>
         {% endfor %}
